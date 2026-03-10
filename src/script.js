@@ -12,8 +12,6 @@ ctx.imageSmoothingEnabled = false;
 const player = new Player(canvas.width, canvas.height);
 const playerProjectiles = [];
 
-const invader = new Invader({ x: 100, y: 100 }, 5);
-
 const keys = {
     left: false,
     right: false,
@@ -40,8 +38,6 @@ const clearProjectiles = () => {
 
 const gameloop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    invader.draw(ctx);
 
     drawProjectiles();
     clearProjectiles();
