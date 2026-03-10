@@ -1,17 +1,33 @@
-class Grid {
-        constructor(rows, cols) {
-            this.rows = rows;
-            this.cols = cols;
-        }
+import Invader from "./Invader.js";
 
-        init() {
-            const array = [];
-            for (let row = 0; row < array.length; row++) {
-                for (let cols = 0; cols < array.length; cols++) {
-                    
-                }
+class Grid {
+    constructor(rows, cols) {
+        this.rows = rows;
+        this.cols = cols;
+
+        this.invadersVelocity = 1;
+        this.invaders = this.init();
+    }
+
+    init() {
+        const array = [];
+
+        for (let row = 0; row < this.rows; row +=1) {
+            for (let col = 0; col < this.cols; col +=1) {
+                const invader = new Invader(
+                    {
+                    x: col,
+                    y: row,
+                    },
+                    this.invadersVelocity
+                );
+
+                array.push(invader)
             }
         }
+
+        return array;
+    }
 
 }
 
