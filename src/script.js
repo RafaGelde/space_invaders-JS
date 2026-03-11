@@ -15,6 +15,7 @@ const grid = new Grid(3, 6);
 
 const playerProjectiles = [];
 const invadersProjectiles = [];
+const particles = [];
 
 const keys = {
     left: false,
@@ -42,10 +43,39 @@ const clearProjectiles = () => {
     })
 }
 
+const createExplosion = (position, size, color) => {
+    for (let i = 0; i < 10; i += 1) {
+        const particle = new Particle(
+            {
+                x: 300,
+                y: 500,
+            },
+            {
+                x: Math.random() - 0.5,
+                y: Math.random() - 0.5,
+            },
+            2,
+            "crimson",
+        );
+
+        particles.push(particle);
+    }
+}
+
+const drawParticles = () => {
+    particles.forEach ((particle) => {
+        particle.draw(ctx);
+        particle.update();
+    })  
+}
+
 const checkShootInvaders = () => {
     grid.invaders.forEach((invader, invaderIndex) => {
         playerProjectiles.some((projectile, projectileIndex) => {
             if (invader.hit(projectile)) {
+
+                createExplosion();
+
                 grid.invaders.splice(invaderIndex, 1);
                 playerProjectiles.splice(projectileIndex, 1);
             }
@@ -53,13 +83,10 @@ const checkShootInvaders = () => {
     })
 }
 
-const p = new Particle({ x: 200, y: 200}, { x: 0, y: 0}, 15, "crimson");
-
 const gameloop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    p.draw(ctx);
-
+    drawParticles();
     drawProjectiles();
     clearProjectiles();
 

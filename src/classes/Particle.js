@@ -14,6 +14,10 @@ class Particle {
         ctx.fill();
         ctx.closePath();
     }
+    update() {
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
+    }
 }
 
 export default Particle;
