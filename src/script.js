@@ -1,6 +1,7 @@
 import Grid from "./classes/Grid.js";
 import Player from "./classes/Player.js";
 import Particle from "./classes/Particle.js";
+import { GameState } from "./utils/constants.js";
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
@@ -9,6 +10,8 @@ canvas.width = innerWidth;
 canvas.height = innerHeight;
 
 ctx.imageSmoothingEnabled = false;
+
+let currentState = GameState.PLAYING;
 
 const player = new Player(canvas.width, canvas.height);
 const grid = new Grid(3, 6);
@@ -117,83 +120,92 @@ const spawnGrid = () => {
 
 const gameOver = () => {
     createExplosion( 
-                {
-                    x:player.position.x + player.width / 2, 
-                    y:player.position.y + player.height / 2,
-                }, 
-                10, 
-                "white"
-            );
+        {
+            x:player.position.x + player.width / 2, 
+            y:player.position.y + player.height / 2,
+        }, 
+        10, 
+        "white"
+    );
 
-            createExplosion( 
-                {
-                    x:player.position.x + player.width / 2, 
-                    y:player.position.y + player.height / 2,
-                }, 
-                10, 
-                "#4D9BE6"
-            );
+    createExplosion( 
+        {
+            x:player.position.x + player.width / 2, 
+            y:player.position.y + player.height / 2,
+        }, 
+        10, 
+        "#4D9BE6"
+    );
 
-            createExplosion( 
-                {
-                    x:player.position.x + player.width / 2, 
-                    y:player.position.y + player.height / 2,
-                }, 
-                10, 
-                "crimson"
-            );
+    createExplosion( 
+        {
+            x:player.position.x + player.width / 2, 
+            y:player.position.y + player.height / 2,
+        }, 
+        10, 
+        "crimson"
+    );
+
+    currentState = GameState.GAME_OVER
 }
 
 const gameloop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    spawnGrid();
+    if (currentState == GameState.PLAYING) {
+        spawnGrid();
 
-    drawParticles();
-    drawProjectiles();
-    clearProjectiles();
-    clearParticle();
+        drawProjectiles();
+        drawParticles();
 
-    checkShootPlayer();
-    checkShootInvaders();
+        clearProjectiles();
+        clearParticle();
 
-    grid.draw(ctx);
-    //grid.update();
+        checkShootInvaders();
+        checkShootPlayer();
 
-    ctx.save(ctx);
+        grid.draw(ctx);
+        //grid.update();
 
-    ctx.translate(
-        player.position.x + player.width / 2, 
-        player.position.y + player.height / 2
-    );
+        ctx.save(ctx);
 
-    if (keys.shoot.pressed && keys.shoot.released) {
-        player.shoot(playerProjectiles);
-        keys.shoot.released = false;
+        ctx.translate(
+            player.position.x + player.width / 2, 
+            player.position.y + player.height / 2
+        );
+
+        if (keys.shoot.pressed && keys.shoot.released) {
+            player.shoot(playerProjectiles);
+            keys.shoot.released = false;
+        }
+
+        if (keys.left && player.position.x >= 0) {
+            player.moveLeft();
+            ctx.rotate(-0.15);
+        }
+        if (keys.right && player.position.x <= canvas.width - player.width) {
+            player.moveRight();
+            ctx.rotate(0.15);
+        }
+
+        ctx.translate(
+            - player.position.x - player.width / 2, 
+            - player.position.y - player.height / 2
+        );
+
+        player.draw(ctx);
+        ctx.restore();
     }
 
-    if (keys.left && player.position.x >= 0) {
-        player.moveLeft();
-        ctx.rotate(-0.15);
+    if (currentState == GameState.GAME_OVER) {
+        drawParticles();
+        drawProjectiles();
+
+        grid.draw(ctx);
+        grid.update();
     }
-    if (keys.right && player.position.x <= canvas.width - player.width) {
-        player.moveRight();
-        ctx.rotate(0.15);
-    }
-
-    ctx.translate(
-        - player.position.x - player.width / 2, 
-        - player.position.y - player.height / 2
-    );
-
-    player.draw(ctx);
-
-    ctx.restore();
-    
     requestAnimationFrame(gameloop);
 }
-
-player.draw(ctx);
 
 addEventListener("keydown", (event) => {
     const key = event.key.toLowerCase();
