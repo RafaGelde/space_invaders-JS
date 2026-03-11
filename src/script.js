@@ -102,7 +102,21 @@ const checkShootPlayer = () => {
     invadersProjectiles.some((projectile, i) => {
         if (player.hit(projectile)) {
             invadersProjectiles.splice(i, 1);
-            createExplosion( 
+            gameOver();
+        }
+    });
+};
+
+const spawnGrid = () => {
+    if (grid.invaders.length === 0) {
+        grid.rows = Math.round(Math.random() * 9 + 1)
+        grid.cols = Math.round(Math.random() * 9 + 1)
+        grid.restart();
+    }
+}
+
+const gameOver = () => {
+    createExplosion( 
                 {
                     x:player.position.x + player.width / 2, 
                     y:player.position.y + player.height / 2,
@@ -128,12 +142,12 @@ const checkShootPlayer = () => {
                 10, 
                 "crimson"
             );
-        }
-    });
-};
+}
 
 const gameloop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    spawnGrid();
 
     drawParticles();
     drawProjectiles();
