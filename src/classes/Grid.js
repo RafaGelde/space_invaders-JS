@@ -40,16 +40,17 @@ class Grid {
         if (this.reachedRightBoundary()){
             this.direction = "left";
             this.moveDown = true;
-        }
-        if (this.reachedLeftBoundary()){
+        } else if (this.reachedLeftBoundary()){
             this.direction = "Right";
             this.moveDown = true;
         }
 
-        this.invaders.forEach(invader => {
+        this.invaders.forEach((invader) => {
 
             if (this.moveDown) {
                invader.moveDown(); 
+               invader.incrementVelocity(0.2);
+               this.invadersVelocity = invader.velocity;
             }
 
             if (this.direction === "right") invader.moveRight(); 
@@ -59,11 +60,10 @@ class Grid {
     }
 
     reachedRightBoundary() {
-
+        return this.invaders.some((invader) => invader.position.x + invader.width >= innerWidth);
     }
-
     reachedLeftBoundary() {
-        
+        return this.invaders.some((invader) => invader.position.x <= 0);
     }
 }
 
