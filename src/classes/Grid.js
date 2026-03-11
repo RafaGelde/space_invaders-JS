@@ -41,7 +41,7 @@ class Grid {
             this.direction = "left";
             this.moveDown = true;
         } else if (this.reachedLeftBoundary()){
-            this.direction = "Right";
+            this.direction = "right";
             this.moveDown = true;
         }
 
@@ -64,6 +64,11 @@ class Grid {
     }
     reachedLeftBoundary() {
         return this.invaders.some((invader) => invader.position.x <= 0);
+    }
+
+    getRandomInvader() {
+        const index = Math.floor(Math.random() * this.invaders.length);
+        return this.invaders[index];
     }
 }
 

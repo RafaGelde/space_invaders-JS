@@ -46,7 +46,7 @@ class Invader {
     shoot(projectiles) {
         const p = new Projectile({
             x: this.position.x + this.width / 2 - 0.5,
-            y: this.position.y + 2 + 1,
+            y: this.position.y + this.height,
         },
         10
     );
