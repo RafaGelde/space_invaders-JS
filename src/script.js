@@ -98,6 +98,40 @@ const checkShootInvaders = () => {
     })
 };
 
+const checkShootPlayer = () => {
+    invadersProjectiles.some((projectile, i) => {
+        if (player.hit(projectile)) {
+            invadersProjectiles.splice(i, 1);
+            createExplosion( 
+                {
+                    x:player.position.x + player.width / 2, 
+                    y:player.position.y + player.height / 2,
+                }, 
+                10, 
+                "white"
+            );
+
+            createExplosion( 
+                {
+                    x:player.position.x + player.width / 2, 
+                    y:player.position.y + player.height / 2,
+                }, 
+                10, 
+                "#4D9BE6"
+            );
+
+            createExplosion( 
+                {
+                    x:player.position.x + player.width / 2, 
+                    y:player.position.y + player.height / 2,
+                }, 
+                10, 
+                "crimson"
+            );
+        }
+    });
+};
+
 const gameloop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -106,6 +140,7 @@ const gameloop = () => {
     clearProjectiles();
     clearParticle();
 
+    checkShootPlayer();
     checkShootInvaders();
 
     grid.draw(ctx);
@@ -165,12 +200,12 @@ addEventListener("keyup", (event) => {
     }
 })
 
-//setInterval(() => {
-//    const invader = grid.getRandomInvader()
-//
-//    if (invader) {
-//        invader.shoot(invadersProjectiles)
-//    }
-//}, 1000)
+setInterval(() => {
+    const invader = grid.getRandomInvader()
+
+    if (invader) {
+        invader.shoot(invadersProjectiles)
+    }
+}, 1000)
 
 gameloop();
