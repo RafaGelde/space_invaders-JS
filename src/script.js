@@ -1,5 +1,6 @@
 import Grid from "./classes/Grid.js";
 import Player from "./classes/Player.js";
+import Particle from "./classes/Particle.js";
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
@@ -52,8 +53,12 @@ const checkShootInvaders = () => {
     })
 }
 
+const p = new Particle({ x: 200, y: 200}, { x: 0, y: 0}, 15, "crimson");
+
 const gameloop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    p.draw(ctx);
 
     drawProjectiles();
     clearProjectiles();
