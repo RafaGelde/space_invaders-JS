@@ -24,7 +24,7 @@ const keys = {
         pressed: false,
         released: true
     },
-}
+};
 
 const drawProjectiles = () => {
     const projectiles = [...playerProjectiles,...invadersProjectiles];
@@ -33,7 +33,7 @@ const drawProjectiles = () => {
         projectile.draw(ctx);
         projectile.update();
     })
-}
+};
 
 const clearProjectiles = () => {
     playerProjectiles.forEach((projectile, index) => {
@@ -41,47 +41,62 @@ const clearProjectiles = () => {
             playerProjectiles.splice(index, 1);
         }
     })
+};
+
+const clearParticle = () => {
+    particles.forEach((particle, i) => {
+        if (particle.opacity <= 0) {
+            particles.splice(i, 1);
+        }
+    })
 }
 
 const createExplosion = (position, size, color) => {
-    for (let i = 0; i < 10; i += 1) {
+    for (let i = 0; i < size; i += 1) {
         const particle = new Particle(
             {
-                x: 300,
-                y: 500,
+                x: position.x,
+                y: position.y,
             },
             {
                 x: Math.random() - 0.5,
                 y: Math.random() - 0.5,
             },
             2,
-            "crimson",
+            color,
         );
 
         particles.push(particle);
     }
-}
+};
 
 const drawParticles = () => {
     particles.forEach ((particle) => {
         particle.draw(ctx);
         particle.update();
     })  
-}
+};
 
 const checkShootInvaders = () => {
     grid.invaders.forEach((invader, invaderIndex) => {
         playerProjectiles.some((projectile, projectileIndex) => {
             if (invader.hit(projectile)) {
 
-                createExplosion();
+                createExplosion(
+                    {
+                        x: invader.position.x + invader.width / 2,
+                        y: invader.position.y + invader.height / 2,
+                    },
+                    10,
+                    "#941CFF",
+                );
 
                 grid.invaders.splice(invaderIndex, 1);
                 playerProjectiles.splice(projectileIndex, 1);
             }
         })
     })
-}
+};
 
 const gameloop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -89,6 +104,7 @@ const gameloop = () => {
     drawParticles();
     drawProjectiles();
     clearProjectiles();
+    clearParticle();
 
     checkShootInvaders();
 
@@ -136,7 +152,7 @@ addEventListener("keydown", (event) => {
     if (key === "a") keys.left = true;
     if (key === "d") keys.right = true;
     if (key === "enter") keys.shoot.pressed = true;
-})
+});
 
 addEventListener("keyup", (event) => {
     const key = event.key.toLowerCase();
