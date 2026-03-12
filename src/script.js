@@ -197,7 +197,8 @@ const gameOver = () => {
     );
 
     currentState = GameState.GAME_OVER
-    player.alive = false;
+    player.alive = false
+    document.body.append(gameOverScreen)
 };
 
 const gameloop = () => {
@@ -295,6 +296,18 @@ buttonPlay.addEventListener("click", () => {
         invader.shoot(invadersProjectiles)
     }
 }, 1000);
+});
+
+buttonRestart.addEventListener("click", () => {
+    currentState = GameState.PLAYING;
+    player.alive = true;
+
+    grid.invaders.length = 0;
+    grid.invadersVelocity = 1;
+    
+    invadersProjectiles.length = 0;
+
+    gameOverScreen.remove();
 });
 
 gameloop();
