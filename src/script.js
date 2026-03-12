@@ -206,8 +206,8 @@ const gameloop = () => {
         checkShootPlayer();
         checkShootObstacles();
 
-        grid.draw(ctx);
-        grid.update(player.alive);
+        //grid.draw(ctx);
+        //grid.update(player.alive);
 
         ctx.save(ctx);
 
@@ -272,12 +272,12 @@ addEventListener("keyup", (event) => {
     }
 });
 
-setInterval(() => {
-    const invader = grid.getRandomInvader()
-
-    if (invader) {
-        invader.shoot(invadersProjectiles)
-    }
-}, 1000);
+//setInterval(() => {
+//    const invader = grid.getRandomInvader()
+//
+//    if (invader) {
+//        invader.shoot(invadersProjectiles)
+//    }
+//}, 1000);
 
 gameloop();
