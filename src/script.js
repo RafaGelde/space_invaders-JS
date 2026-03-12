@@ -1,6 +1,7 @@
 import Grid from "./classes/Grid.js";
 import Player from "./classes/Player.js";
 import Particle from "./classes/Particle.js";
+import Obstacle from "./classes/Obstacle.js";
 import { GameState } from "./utils/constants.js";
 
 const canvas = document.querySelector("canvas");
@@ -19,6 +20,22 @@ const grid = new Grid(3, 6);
 const playerProjectiles = [];
 const invadersProjectiles = [];
 const particles = [];
+const obstacles = [];
+
+const initObstacles = () => {
+    const x = canvas.width / 2 -50;
+    const y = canvas.height - 250;
+    const offset = canvas.width * 0.15;
+    const color = "crimson";
+
+    const obstacle1 = new Obstacle({ x: x - offset, y }, 100, 20, color)
+    const obstacle2 = new Obstacle({ x: x + offset, y }, 100, 20, color)
+    
+    obstacles.push(obstacle1);
+    obstacles.push(obstacle2);
+}
+
+initObstacles();
 
 const keys = {
     left: false,
@@ -27,6 +44,10 @@ const keys = {
         pressed: false,
         released: true
     },
+};
+
+const drawObstacles = () => {
+    obstacles.forEach((obstacle) => obstacle.draw(ctx));
 };
 
 const drawProjectiles = () => {
@@ -158,6 +179,7 @@ const gameloop = () => {
 
         drawProjectiles();
         drawParticles();
+        drawObstacles();
 
         clearProjectiles();
         clearParticle();
@@ -166,7 +188,7 @@ const gameloop = () => {
         checkShootPlayer();
 
         grid.draw(ctx);
-        grid.update(player.alive);
+        //grid.update(player.alive);
 
         ctx.save(ctx);
 
@@ -228,14 +250,14 @@ addEventListener("keyup", (event) => {
         keys.shoot.pressed = false;
         keys.shoot.released = true;
     }
-})
+});
 
-setInterval(() => {
-    const invader = grid.getRandomInvader()
-
-    if (invader) {
-        invader.shoot(invadersProjectiles)
-    }
-}, 1000)
+//setInterval(() => {
+//    const invader = grid.getRandomInvader()
+//
+//    if (invader) {
+//        invader.shoot(invadersProjectiles)
+//    }
+//}, 1000);
 
 gameloop();
