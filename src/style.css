@@ -40,7 +40,8 @@ canvas {
     margin-top: auto;
 }
 
-.button-play {
+.button-play, 
+.button-restart {
     border: none;
     padding: 12px 20px;
     border-radius: 5px;
@@ -51,6 +52,22 @@ canvas {
     cursor: pointer;
 }
 
-.button-play:hover {
+.button-play:hover,
+.button-restart:hover {
     background-color: #fff;
+}
+
+.game-over {
+    scale: 0;
+    animation: zoom 2s ease-in-out forwards;
+
+}
+
+@keyframes zoom {
+    from {
+        scale: 0;
+    }
+    to {
+        scale: 1;
+    }
 }
