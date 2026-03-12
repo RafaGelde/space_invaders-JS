@@ -147,6 +147,7 @@ const gameOver = () => {
     );
 
     currentState = GameState.GAME_OVER
+    player.alive = false;
 }
 
 const gameloop = () => {
@@ -165,7 +166,7 @@ const gameloop = () => {
         checkShootPlayer();
 
         grid.draw(ctx);
-        //grid.update();
+        grid.update(player.alive);
 
         ctx.save(ctx);
 
@@ -201,8 +202,11 @@ const gameloop = () => {
         drawParticles();
         drawProjectiles();
 
+        clearProjectiles();
+        clearParticle();
+
         grid.draw(ctx);
-        grid.update();
+        grid.update(player.alive);
     }
     requestAnimationFrame(gameloop);
 }
