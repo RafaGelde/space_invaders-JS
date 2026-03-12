@@ -25,6 +25,18 @@ ctx.imageSmoothingEnabled = false;
 
 let currentState = GameState.START;
 
+const gameData = {
+    score: 0,
+    level: 1,
+    high: 0,
+}
+
+const showGameData = () => {
+    scoreElement.textContent = gameData.score
+    levelElement.textContent = gameData.level
+    highElement.textContent = gameData.high
+}
+
 const player = new Player(canvas.width, canvas.height);
 const grid = new Grid(3, 6);
 
@@ -56,6 +68,14 @@ const keys = {
         released: true
     },
 };
+
+const incrementScore = (value) => {
+    gameData.score += value
+
+    if (gameData.score > gameData.high) {
+        gameData.high = gameData.score
+    }
+}
 
 const drawObstacles = () => {
     obstacles.forEach((obstacle) => obstacle.draw(ctx));
@@ -126,6 +146,8 @@ const checkShootInvaders = () => {
                     "#941CFF",
                 );
 
+                incrementScore(100);
+
                 grid.invaders.splice(invaderIndex, 1);
                 playerProjectiles.splice(projectileIndex, 1);
             }
@@ -165,6 +187,7 @@ const spawnGrid = () => {
         grid.rows = Math.round(Math.random() * 9 + 1)
         grid.cols = Math.round(Math.random() * 9 + 1)
         grid.restart();
+        gameData.level += 1;
     }
 };
 
@@ -205,6 +228,7 @@ const gameloop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (currentState == GameState.PLAYING) {
+        showGameData();
         spawnGrid();
 
         drawProjectiles();
@@ -306,6 +330,9 @@ buttonRestart.addEventListener("click", () => {
     grid.invadersVelocity = 1;
     
     invadersProjectiles.length = 0;
+
+    gameData.score = 0;
+    gameData.level = 0;
 
     gameOverScreen.remove();
 });
