@@ -4,15 +4,26 @@ import Particle from "./classes/Particle.js";
 import Obstacle from "./classes/Obstacle.js";
 import { GameState } from "./utils/constants.js";
 
+const startScreen = document.querySelector(".start-screen");
+const gameOverScreen = document.querySelector(".game-over");
+const scoreUi = document.querySelector(".score-ui");
+const scoreElement = scoreUi.querySelector(".score > span");
+const levelElement = scoreUi.querySelector(".level > span");
+const highElement = scoreUi.querySelector(".high > span");
+const buttonPlay = document.querySelector(".button-play");
+const buttonRestart = document.querySelector(".button-restart");
+
+gameOverScreen.remove();
+
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 
 canvas.width = innerWidth;
-canvas.height = innerHeight;
+canvas.height = innerHeight; 
 
 ctx.imageSmoothingEnabled = false;
 
-let currentState = GameState.PLAYING;
+let currentState = GameState.START;
 
 const player = new Player(canvas.width, canvas.height);
 const grid = new Grid(3, 6);
@@ -206,8 +217,8 @@ const gameloop = () => {
         checkShootPlayer();
         checkShootObstacles();
 
-        //grid.draw(ctx);
-        //grid.update(player.alive);
+        grid.draw(ctx);
+        grid.update(player.alive);
 
         ctx.save(ctx);
 
@@ -272,12 +283,18 @@ addEventListener("keyup", (event) => {
     }
 });
 
-//setInterval(() => {
-//    const invader = grid.getRandomInvader()
-//
-//    if (invader) {
-//        invader.shoot(invadersProjectiles)
-//    }
-//}, 1000);
+buttonPlay.addEventListener("click", () => {
+    startScreen.remove()
+    scoreUi.style.display = "block"
+    currentState = GameState.PLAYING;
+
+    setInterval(() => {
+    const invader = grid.getRandomInvader()
+
+    if (invader) {
+        invader.shoot(invadersProjectiles)
+    }
+}, 1000);
+});
 
 gameloop();
