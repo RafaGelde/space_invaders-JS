@@ -45,13 +45,13 @@ class Grid {
             this.moveDown = true;
         }
 
-        if (!playerStatus) this.movedown = false;
+        if (!playerStatus) this.moveDown = false;
         
         this.invaders.forEach((invader) => {
 
             if (this.moveDown) {
                invader.moveDown(); 
-               invader.incrementVelocity(0.2);
+               invader.incrementVelocity(0.1);
                this.invadersVelocity = invader.velocity;
             }
 
